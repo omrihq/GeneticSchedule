@@ -19,6 +19,30 @@ class Class:
 	def get_days(self):
 		return self.days
 
+	def overlapping(self, other):
+		class1_start = self.time
+		class1_end = class1_start + self.length
+	
+		class2_start = other.time
+		class2_end = class2_start + other.length
+	
+		intersection = [day for day in self.days if day in other.days]
+		if intersection:
+			if class1_start < class2_start:
+				if class1_end >= class2_start:
+					return True
+				else:
+					return False
+			elif class1_start > class2_start:
+				if class2_end >= class1_start:
+					return True
+				else:
+					return False
+			else:
+				return True
+		else:
+			return False
+
 	def __str__(self):
 		return "%s { time : %s, length: %s, days: %s}" % (self.name, self.time, self.length, self.days)
 
@@ -52,11 +76,22 @@ class Schedule:
 	def get_earliest_class(self):
 		return self.classes[0].time
 
+
 	def get_end_time(self):
 		return self.classes[len(self.classes)-1].time + self.classes[len(self.classes)-1].get_length()
 
 	def get_total_class_time(self):
 		return get_end_time - get_earliest_class
+
+	def schedule_by_day(self):
+		d = {}
+		for clas in self.classes:
+			for day in clas.days:
+				if day in d:
+					d[day].append(clas)
+				else:
+					d[day] = [clas]
+		return d
 
 	def get_score(self):
 		#Where some of the genetics come in
@@ -179,25 +214,6 @@ def weighted_random_time():
 	else:
 		return .9
 
-def overlapping(class1, class2):
-	class1_start = class1.time
-	class1_end = class1_start + class1.length
-
-	class2_start = class2.time
-	class2_end = class2_start + class2.length
-
-	if class1_start < class2_start:
-		if class1_end >= class2_start:
-			return True
-		else:
-			return False
-	elif class1_start > class2_start:
-		if class2_end >= class1_start:
-			return True
-		else:
-			return False
-	else:
-		return True
 
 def create_random_schedule(potential_classes):
 	classes = []
@@ -206,7 +222,7 @@ def create_random_schedule(potential_classes):
 		randclas = random.choice(potential_classes)
 		flag = True
 		for clas in classes:
-			if overlapping(randclas, clas):
+			if randclas.overlapping(clas):
 				flag = False
 				break
 		if flag == True:
@@ -242,9 +258,8 @@ def main():
 
 	for schedule in schedules:
 		print schedule
-
-	
-
+		for k,v in schedule.schedule_by_day().iteritems():	
+			print k,[str(clas) for clas in v]
 
 if __name__ == '__main__':
 	main()
