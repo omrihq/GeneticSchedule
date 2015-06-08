@@ -215,17 +215,27 @@ def create_fifty_schedules(classes):
 		schedules.append(create_random_schedule(classes))
 	return schedules
 
-def main():
+def create_classes():
 	all_classes = {}
 	for thing in class_names:
-		all_classes[thing] = {"time" : float(random.randrange(14,41))/2, "length" : weighted_random_time()}
+		#times in random range between 7am and 8:30 pm, aka 20.5. Days are a random list of size 1-5 with numbers between 1-5, 1 being monday, 5 being friday
+		all_classes[thing] = {"time" : float(random.randrange(14,41))/2, "length" : weighted_random_time(). "days" : sorted(set((random.randint(1,5) for i in xrange(random.randint(1,5)))))}
 	
 	classes= []
 	for name, desc in all_classes.iteritems():
 		classes.append(Class(name, desc["time"], desc["length"]))
 
+	return classes
+
+def main():
+	classes = create_classes()
+
 	schedules = create_fifty_schedules(classes)
 	schedules = sorted(schedules)
+
+	for schedule in schedules:
+		print schedule
+
 	
 
 
