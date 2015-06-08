@@ -1,10 +1,11 @@
 import random
 
 class Class:
-	def __init__(self, name, time, length):
+	def __init__(self, name, time, length, days):
 		self.name = name
 		self.time = time
 		self.length = length
+		self.days = days
 
 	def get_time(self, time):
 		return self.time
@@ -15,8 +16,11 @@ class Class:
 	def get_length(self):
 		return self.length
 
+	def get_days(self):
+		return self.days
+
 	def __str__(self):
-		return "%s { time : %s, length: %s }" % (self.name, self.time, self.length)
+		return "%s { time : %s, length: %s, days: %s}" % (self.name, self.time, self.length, self.days)
 
 	def __lt__ (self, other):
 		if self.time == other.time:
@@ -29,6 +33,8 @@ class Class:
 		if self.time != other.time:
 			return False
 		if self.length != other.length:
+			return False
+		if self.days != other.days:
 			return False
 		return True
 	
@@ -219,11 +225,11 @@ def create_classes():
 	all_classes = {}
 	for thing in class_names:
 		#times in random range between 7am and 8:30 pm, aka 20.5. Days are a random list of size 1-5 with numbers between 1-5, 1 being monday, 5 being friday
-		all_classes[thing] = {"time" : float(random.randrange(14,41))/2, "length" : weighted_random_time(). "days" : sorted(set((random.randint(1,5) for i in xrange(random.randint(1,5)))))}
+		all_classes[thing] = {"time" : float(random.randrange(14,41))/2, "length" : weighted_random_time(), "days" : sorted(set((random.randint(1,5) for i in xrange(random.randint(1,5)))))}
 	
 	classes= []
 	for name, desc in all_classes.iteritems():
-		classes.append(Class(name, desc["time"], desc["length"]))
+		classes.append(Class(name, desc["time"], desc["length"], desc["days"]))
 
 	return classes
 
@@ -232,6 +238,7 @@ def main():
 
 	schedules = create_fifty_schedules(classes)
 	schedules = sorted(schedules)
+
 
 	for schedule in schedules:
 		print schedule
