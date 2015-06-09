@@ -19,7 +19,7 @@ class Class:
 	def get_days(self):
 		return self.days
 
-	def overlapping(self, other):
+	def overlaps(self, other):
 		class1_start = self.time
 		class1_end = class1_start + self.length
 	
@@ -95,7 +95,6 @@ class Schedule:
 						score += 1
 		return score
 		
-
 	def get_end_class_score(self):
 		#Check the time the schedule ends, get the entire week's score
 		score = 0
@@ -161,7 +160,7 @@ class Schedule:
 			return self.score < other.score
 		return self.score > other.score
 
-		
+
 
 #FOR AM-PM TIMES, PUT INTO MILITARY TIME
 class_names =  [
@@ -242,29 +241,6 @@ def weighted_random_time():
 	else:
 		return .9
 
-
-def create_random_schedule(potential_classes):
-	classes = []
-	classes.append(random.choice(potential_classes))
-	while len(classes) < 5:
-		randclas = random.choice(potential_classes)
-		flag = True
-		for clas in classes:
-			if randclas.overlapping(clas):
-				flag = False
-				break
-		if flag == True:
-			classes.append(randclas)
-	schedule = Schedule(classes)
-	return schedule
-
-
-def create_fifty_schedules(classes):
-	schedules = []
-	for i in xrange(50):
-		schedules.append(create_random_schedule(classes))
-	return schedules
-
 def create_classes():
 	all_classes = {}
 	for thing in class_names:
@@ -277,17 +253,47 @@ def create_classes():
 
 	return classes
 
-def main():
-	classes = create_classes()
+def create_random_schedule(potential_classes):
+	count = 0
+	classes = []
+	total = len(potential_classes)
+	#The count ensures that there are no infinite loops if there are overlaps
+	while len(classes) < 6 and count < total:
+		randclas = random.choice(potential_classes)
+		potential_classes.remove(randclas)
+		#print [str(clas) for clas in potential_classes]
+		flag = True
+		for clas in classes:
+			if randclas.overlaps(clas):
+				flag = False
+		if flag == True:
+			classes.append(randclas)
+		count+=1
+	schedule = Schedule(classes)
+	return schedule
 
-	schedules = create_fifty_schedules(classes)
+
+def create_fifty_schedules():
+	schedules = []
+	for i in xrange(50):
+		classes = create_classes()
+		schedules.append(create_random_schedule(classes))
+	return schedules
+
+def main():
+
+	schedules = create_fifty_schedules()
 	schedules = sorted(schedules)
 
+	top_schedules = schedules[0:15]
+	for sched in top_schedules:
+		print sched
+		print sched.score
 
-	for schedule in schedules:
-		print schedule
-		for k,v in schedule.schedule_by_day().iteritems():	
-			print k,[str(clas) for clas in v]
+	print "\n\n"
+	for sched in schedules:
+		print sched
 
 if __name__ == '__main__':
 	main()
+
