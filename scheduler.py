@@ -94,13 +94,39 @@ class Schedule:
 						days.remove(day)
 						score += 1
 		return score
+		
 
+	def get_end_class_score(self):
+		#Check the time the schedule ends, get the entire week's score
+		score = 0
+		days = [1, 2, 3, 4, 5]
+		day_sched = self.schedule_by_day()
 
-	def get_end_time(self):
-		return self.classes[len(self.classes)-1].time + self.classes[len(self.classes)-1].get_length()
-
-	#def get_total_class_time(self):
-	#	return get_end_time - get_earliest_class
+		for day in day_sched:
+			last_class = day_sched[day][len(day_sched[day])-1]
+			for clas in day_sched[day]:
+				if day in days:
+					end_time = last_class.time + last_class.length
+					if end_time <= 15: 
+						days.remove(day)
+						score += 3
+					elif end_time <= 16:
+						days.remove(day)
+						score+= 2
+					elif end_time < 17:
+						days.remove(day)
+						score+=1
+					else:
+						if end_time > 20:
+							days.remove(day)
+							score -= 3
+						elif end_time > 19:
+							days.remove(day)
+							score -= 2
+						elif end_time > 18:
+							days.remove(day)
+							score -= 1
+		return score
 
 	def schedule_by_day(self):
 		d = {}
@@ -117,19 +143,9 @@ class Schedule:
 		score = 0
 		#I REALLY want late classes after 11am so score increases 2. Will change to get_score(self, early_time) so the user can change it
 		score += self.get_earliest_class_score()
-		#Check how late your day ends, if its past 5 its too late
-		#if self.get_end_time() < 16:
-		#	score += 2
-		#elif self.get_end_time() < 17:
-		#	score += 1
-		#else:
-		#	#If the score ends after  
-		#	if self.get_end_time() > 20:
-		#		score -= 3
-		#	elif self.get_end_time() > 19:
-		#		score -= 2
-		#	elif self.get_end_time() > 18:
-		#		score =- 1
+		
+		score += self.get_end_class_score()
+		
 
 		return score
 
@@ -144,6 +160,8 @@ class Schedule:
 		if self.score == other.score:
 			return self.score < other.score
 		return self.score > other.score
+
+		
 
 #FOR AM-PM TIMES, PUT INTO MILITARY TIME
 class_names =  [
