@@ -73,15 +73,34 @@ class Schedule:
 	def get_classes(self):
 		return self.classes
 
-	def get_earliest_class(self):
-		return self.classes[0].time
+	def get_earliest_class_score(self):
+		#Gets the earliest of every day and add up
+		score = 0
+		days = [1, 2, 3, 4, 5]
+		day_sched = self.schedule_by_day()
+		for day in day_sched:
+			for clas in day_sched[day]:
+				if day in days:
+					if clas.time <= 8:
+						days.remove(day)
+						score -= 3
+					elif clas.time <= 9:
+						days.remove(day)
+						score -= 2
+					elif clas.time >= 11.5:
+						days.remove(day)
+						score += 3
+					elif clas.time > 10:
+						days.remove(day)
+						score += 1
+		return score
 
 
 	def get_end_time(self):
 		return self.classes[len(self.classes)-1].time + self.classes[len(self.classes)-1].get_length()
 
-	def get_total_class_time(self):
-		return get_end_time - get_earliest_class
+	#def get_total_class_time(self):
+	#	return get_end_time - get_earliest_class
 
 	def schedule_by_day(self):
 		d = {}
@@ -97,29 +116,20 @@ class Schedule:
 		#Where some of the genetics come in
 		score = 0
 		#I REALLY want late classes after 11am so score increases 2. Will change to get_score(self, early_time) so the user can change it
-		if self.get_earliest_class() >= 11:
-			score += 3
-		elif self.get_earliest_class() >= 10:
-			score += 1
-		else:
-			#If it is this early subtract 3
-			if self.get_earliest_class() <= 8:
-				score -= 3
-			elif self.get_earliest_class() <= 9:
-				score -= 2
+		score += self.get_earliest_class_score()
 		#Check how late your day ends, if its past 5 its too late
-		if self.get_end_time() < 16:
-			score += 2
-		elif self.get_end_time() < 17:
-			score += 1
-		else:
-			#If the score ends after  
-			if self.get_end_time() > 20:
-				score -= 3
-			elif self.get_end_time() > 19:
-				score -= 2
-			elif self.get_end_time() > 18:
-				score =- 1
+		#if self.get_end_time() < 16:
+		#	score += 2
+		#elif self.get_end_time() < 17:
+		#	score += 1
+		#else:
+		#	#If the score ends after  
+		#	if self.get_end_time() > 20:
+		#		score -= 3
+		#	elif self.get_end_time() > 19:
+		#		score -= 2
+		#	elif self.get_end_time() > 18:
+		#		score =- 1
 
 		return score
 
