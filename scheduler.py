@@ -129,7 +129,19 @@ class Schedule:
 		return score
 
 	def get_day_score(self):
-		pass
+		days = [1, 2, 3, 4, 5]
+		for clas in self.classes:
+			for day in clas.days:
+				if day in days:
+					days.remove(day)
+		score = 0
+		#if there are no days off, score subtracts 1, otherwise it adds 2*(number of days off)-1
+		score += 2*(len(days))-1
+		#If friday is off, add 3
+		if 5 in days:
+			score+=3
+		return score
+
 
 	def schedule_by_day(self):
 		d = {}
@@ -149,6 +161,7 @@ class Schedule:
 		#I REALLY want late classes after 11am so score increases 2. Will change to get_score(self, early_time) so the user can change it
 		score += self.get_earliest_class_score()
 		score += self.get_end_class_score()
+		score += self.get_day_score()
 
 		return score
 
@@ -292,7 +305,7 @@ def repopulate(top_schedules):
 			new_classes.append(clas)
 		schedule_scores+= float(sched.score)
 
-	print schedule_scores/15
+	print "Top Schedule average: %f"%(schedule_scores/15)
 
 	new_classes = list(set(new_classes))
 
@@ -302,22 +315,26 @@ def repopulate(top_schedules):
 	print "\n"
 	return schedules
 
-def main():
-	classes = make_initial_classes()
-	print classes
-	print len(classes)
-	schedules = create_fifty_schedules(classes)
-	schedules = sorted(schedules)
-
+def genetic(schedules):
 	for i in xrange(5):
 		top_schedules = schedules[0:15]
 		schedules = repopulate(top_schedules)
+	return schedules
+
+def main():
+	classes = make_initial_classes()
+
+	schedules = create_fifty_schedules(classes)
+	schedules = sorted(schedules)
+	#for sched in schedules:
+	#	print sched.get_day_score(), sched
+
+	schedules = genetic(schedules)
+	
 
 	for sched in schedules[0:5]:
 		print sched
 	
-
-
 
 if __name__ == '__main__':
 	main()
