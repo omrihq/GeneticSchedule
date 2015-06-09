@@ -281,21 +281,92 @@ def create_fifty_schedules(classes):
 		schedules.append(create_random_schedule(temp))
 	return schedules
 
-#def re_make_classes(new_class_list):
-#	pass
+def re_make_classes(new_class_list):
+	pass
 
 def main():
 	classes = create_classes()
-
+	print classes
+	print len(classes)
 	schedules = create_fifty_schedules(classes)
 	schedules = sorted(schedules)
 
 
 	top_schedules = schedules[0:15]
 	top_class = []
+	new_classes = []
+	schedule_scores = 0
 	for sched in top_schedules:
-		print sched
-		print sched.score
+		for clas in sched.get_classes():
+			new_classes.append(clas)
+		schedule_scores+= float(sched.score)
+
+	print schedule_scores/15
+
+	new_classes = list(set(new_classes))
+	print len(new_classes)
+
+	schedules = create_fifty_schedules(new_classes)
+	schedules = sorted(schedules)
+
+	top_schedules = schedules[0:15]
+	top_class = []
+	new_classes = []
+	schedule_scores = 0
+	for sched in top_schedules:
+		for clas in sched.get_classes():
+			new_classes.append(clas)
+		schedule_scores+= float(sched.score)
+	print schedule_scores/15
+
+	new_classes = list(set(new_classes))
+	print len(new_classes)
+
+	schedules = create_fifty_schedules(new_classes)
+	schedules = sorted(schedules)
+
+	top_schedules = schedules[0:15]
+	top_class = []
+	new_classes = []
+	schedule_scores = 0
+	for sched in top_schedules:
+		for clas in sched.get_classes():
+			new_classes.append(clas)
+		schedule_scores+= float(sched.score)
+	print schedule_scores/15
+
+	new_classes = list(set(new_classes))
+	print len(new_classes)
+
+	schedules = create_fifty_schedules(new_classes)
+	schedules = sorted(schedules)
+
+	top_schedules = schedules[0:15]
+	top_class = []
+	new_classes = []
+	schedule_scores = 0
+	for sched in top_schedules:
+		for clas in sched.get_classes():
+			new_classes.append(clas)
+		schedule_scores+= float(sched.score)
+	print schedule_scores/15
+
+	new_classes = list(set(new_classes))
+	print len(new_classes)
+
+	schedules = create_fifty_schedules(new_classes)
+	schedules = sorted(schedules)
+
+	top_schedules = schedules[0:15]
+	top_class = []
+	new_classes = []
+	schedule_scores = 0
+	for sched in top_schedules:
+		for clas in sched.get_classes():
+			new_classes.append(clas)
+		schedule_scores+= float(sched.score)
+	print schedule_scores/15
+
 
 if __name__ == '__main__':
 	main()
