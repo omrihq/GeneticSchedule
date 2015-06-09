@@ -1,4 +1,5 @@
 import random
+import copy
 
 class Class:
 	def __init__(self, name, time, length, days):
@@ -261,7 +262,7 @@ def create_random_schedule(potential_classes):
 	while len(classes) < 6 and count < total:
 		randclas = random.choice(potential_classes)
 		potential_classes.remove(randclas)
-		#print [str(clas) for clas in potential_classes]
+
 		flag = True
 		for clas in classes:
 			if randclas.overlaps(clas):
@@ -273,26 +274,28 @@ def create_random_schedule(potential_classes):
 	return schedule
 
 
-def create_fifty_schedules():
+def create_fifty_schedules(classes):
 	schedules = []
 	for i in xrange(50):
-		classes = create_classes()
-		schedules.append(create_random_schedule(classes))
+		temp = copy.copy(classes)
+		schedules.append(create_random_schedule(temp))
 	return schedules
 
-def main():
+#def re_make_classes(new_class_list):
+#	pass
 
-	schedules = create_fifty_schedules()
+def main():
+	classes = create_classes()
+
+	schedules = create_fifty_schedules(classes)
 	schedules = sorted(schedules)
 
+
 	top_schedules = schedules[0:15]
+	top_class = []
 	for sched in top_schedules:
 		print sched
 		print sched.score
-
-	print "\n\n"
-	for sched in schedules:
-		print sched
 
 if __name__ == '__main__':
 	main()
