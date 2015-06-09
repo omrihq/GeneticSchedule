@@ -128,6 +128,7 @@ class Schedule:
 							score -= 1
 		return score
 
+
 	def schedule_by_day(self):
 		d = {}
 		for clas in self.classes:
@@ -138,14 +139,14 @@ class Schedule:
 					d[day] = [clas]
 		return d
 
+
+
 	def get_score(self):
 		#Where some of the genetics come in
 		score = 0
 		#I REALLY want late classes after 11am so score increases 2. Will change to get_score(self, early_time) so the user can change it
 		score += self.get_earliest_class_score()
-		
 		score += self.get_end_class_score()
-		
 
 		return score
 
@@ -242,7 +243,7 @@ def weighted_random_time():
 	else:
 		return .9
 
-def create_classes():
+def make_initial_classes():
 	all_classes = {}
 	for thing in class_names:
 		#times in random range between 7am and 8:30 pm, aka 20.5. Days are a random list of size 1-5 with numbers between 1-5, 1 being monday, 5 being friday
@@ -281,91 +282,38 @@ def create_fifty_schedules(classes):
 		schedules.append(create_random_schedule(temp))
 	return schedules
 
-def re_make_classes(new_class_list):
-	pass
+def repopulate(top_schedules):
+	new_classes = []
+	schedule_scores = 0
+	for sched in top_schedules:
+		for clas in sched.get_classes():
+			new_classes.append(clas)
+		schedule_scores+= float(sched.score)
+
+	print schedule_scores/15
+
+	new_classes = list(set(new_classes))
+
+	schedules = sorted(create_fifty_schedules(new_classes))
+	return schedules
 
 def main():
-	classes = create_classes()
+	classes = make_initial_classes()
 	print classes
 	print len(classes)
 	schedules = create_fifty_schedules(classes)
 	schedules = sorted(schedules)
 
+	for i in xrange(5):
+		top_schedules = schedules[0:15]
+		schedules = repopulate(top_schedules)
 
-	top_schedules = schedules[0:15]
-	top_class = []
-	new_classes = []
-	schedule_scores = 0
-	for sched in top_schedules:
-		for clas in sched.get_classes():
-			new_classes.append(clas)
-		schedule_scores+= float(sched.score)
+	for sched in schedules[0:5]:
+		print sched
+		
 
-	print schedule_scores/15
+	
 
-	new_classes = list(set(new_classes))
-	print len(new_classes)
-
-	schedules = create_fifty_schedules(new_classes)
-	schedules = sorted(schedules)
-
-	top_schedules = schedules[0:15]
-	top_class = []
-	new_classes = []
-	schedule_scores = 0
-	for sched in top_schedules:
-		for clas in sched.get_classes():
-			new_classes.append(clas)
-		schedule_scores+= float(sched.score)
-	print schedule_scores/15
-
-	new_classes = list(set(new_classes))
-	print len(new_classes)
-
-	schedules = create_fifty_schedules(new_classes)
-	schedules = sorted(schedules)
-
-	top_schedules = schedules[0:15]
-	top_class = []
-	new_classes = []
-	schedule_scores = 0
-	for sched in top_schedules:
-		for clas in sched.get_classes():
-			new_classes.append(clas)
-		schedule_scores+= float(sched.score)
-	print schedule_scores/15
-
-	new_classes = list(set(new_classes))
-	print len(new_classes)
-
-	schedules = create_fifty_schedules(new_classes)
-	schedules = sorted(schedules)
-
-	top_schedules = schedules[0:15]
-	top_class = []
-	new_classes = []
-	schedule_scores = 0
-	for sched in top_schedules:
-		for clas in sched.get_classes():
-			new_classes.append(clas)
-		schedule_scores+= float(sched.score)
-	print schedule_scores/15
-
-	new_classes = list(set(new_classes))
-	print len(new_classes)
-
-	schedules = create_fifty_schedules(new_classes)
-	schedules = sorted(schedules)
-
-	top_schedules = schedules[0:15]
-	top_class = []
-	new_classes = []
-	schedule_scores = 0
-	for sched in top_schedules:
-		for clas in sched.get_classes():
-			new_classes.append(clas)
-		schedule_scores+= float(sched.score)
-	print schedule_scores/15
 
 
 if __name__ == '__main__':
