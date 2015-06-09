@@ -128,6 +128,8 @@ class Schedule:
 							score -= 1
 		return score
 
+	def get_day_score(self):
+		pass
 
 	def schedule_by_day(self):
 		d = {}
@@ -295,6 +297,9 @@ def repopulate(top_schedules):
 	new_classes = list(set(new_classes))
 
 	schedules = sorted(create_fifty_schedules(new_classes))
+	for sched in schedules[0:5]:
+		print sched
+	print "\n"
 	return schedules
 
 def main():
@@ -310,8 +315,6 @@ def main():
 
 	for sched in schedules[0:5]:
 		print sched
-		
-
 	
 
 
