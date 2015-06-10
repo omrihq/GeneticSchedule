@@ -20,6 +20,7 @@ class Class:
     def get_days(self):
         return self.days
 
+    #Checks to see if a class overlaps another one. Accounts for which day they're on. 
     def overlaps(self, other):
         class1_start = self.time
         class1_end = class1_start + self.length
@@ -76,6 +77,8 @@ class Schedule:
 
     def get_earliest_class_score(self):
         #Gets the earliest of every day and add up
+        #I REALLY want late classes after 11am so score increases 2. Will change to get_score(self, early_time) so the user can change it
+
         score = 0
         days = [1, 2, 3, 4, 5]
         day_sched = self.schedule_by_day()
@@ -171,7 +174,6 @@ class Schedule:
     def get_score(self):
         #Where some of the genetics come in
         score = 0
-        #I REALLY want late classes after 11am so score increases 2. Will change to get_score(self, early_time) so the user can change it
         score += self.get_earliest_class_score()
         score += self.get_end_class_score()
         score += self.get_day_score()
@@ -259,7 +261,6 @@ class_names =  [
                 ]
 
 
-#print [str(clas) for clas in classes]
 
 def weighted_random_time():
     #Some classes are 50 minutes, some are 1:50, some are 2:50, but around 60% are 50 minutes, 30% are 1:50, and 10% are 2:50
@@ -341,12 +342,10 @@ def main():
 
     schedules = create_fifty_schedules(classes)
     schedules = sorted(schedules)
-    #for sched in schedules:
-    #   print sched.get_day_score(), sched
 
     schedules = genetic(schedules)
     
-
+    #Test schedule
     for sched in schedules[0:5]:
         print sched
     
